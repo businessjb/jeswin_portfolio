@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Jeswin B // 3D Interactive Resume Portfolio & Game</title>
+  
+  <!-- SEO & Social Meta Tags -->
+  <meta name="description" content="3D Interactive Resume Portfolio of Jeswin B - Computer Science Engineering Student at MITS, Full Stack Developer, AI & Distributed Systems Engineer, ICPC Winner. Explore projects, skills, experience, and download resume.">
+  <meta name="keywords" content="Jeswin B, Jeswin B Maliyekkal, Resume, MITS, Computer Science, Portfolio, Three.js, GitHub, PyTorch, OpenCV, Full Stack">
+  <meta name="author" content="Jeswin B">
+
+  <!-- Favicon SVG -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏎️</text></svg>">
+
+  <!-- Google Web Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Three.js Library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+<body>
+
+  <!-- 3D WebGL Canvas Layer -->
+  <canvas id="webgl-canvas"></canvas>
+
+  <!-- Confetti Canvas for Celebrations -->
+  <canvas id="confetti-canvas"></canvas>
+
+  <!-- Toast Notification -->
+  <div id="toast-notice" class="toast-notice">Notice</div>
+
+  <!-- Main Glassmorphic HUD Overlay Layer -->
+  <div class="hud-layer">
+    
+    <!-- TOP BAR -->
+    <header class="top-bar hud-interactive">
+      <!-- Brand & Status -->
+      <div class="brand-badge" id="brand-badge" onclick="window.openResumeModal()">
+        <div class="status-dot"></div>
+        <div class="brand-text">
+          <h1>Jeswin B</h1>
+          <span>B.TECH CSE // MITS</span>
+        </div>
+      </div>
+
+      <!-- Quick Teleport Navigation -->
+      <nav class="teleport-nav">
+        <button id="nav-home" class="nav-btn active">
+          <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+          Spawn
+        </button>
+        <button id="nav-resume" class="nav-btn highlight-resume">
+          <svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
+          Resume
+        </button>
+        <button id="nav-projects" class="nav-btn">
+          <svg viewBox="0 0 24 24"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H8V4h12v12z"/></svg>
+          Projects
+        </button>
+        <button id="nav-internship" class="nav-btn">
+          <svg viewBox="0 0 24 24"><path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z"/></svg>
+          Experience
+        </button>
+        <button id="nav-education" class="nav-btn">
+          <svg viewBox="0 0 24 24"><path d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 9-4.91V17h2V9L12 3z"/></svg>
+          Education
+        </button>
+        <button id="nav-skills" class="nav-btn">
+          <svg viewBox="0 0 24 24"><path d="M11 21h-1l1-7H7.5c-.88 0-.33-.75-.31-.78C8.48 10.94 10.42 7.54 13.01 3h1l-1 7h3.51c.4 0 .62.19.4.66C12.97 17.55 11 21 11 21z"/></svg>
+          Skills
+        </button>
+        <button id="nav-bowling" class="nav-btn">
+          <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 6.5c0 .83-.67 1.5-1.5 1.5S10 9.33 10 8.5 10.67 7 11.5 7s1.5.67 1.5 1.5zm-3 4c0 .83-.67 1.5-1.5 1.5S7 13.33 7 12.5 7.67 11 8.5 11s1.5.67 1.5 1.5zm6 0c0 .83-.67 1.5-1.5 1.5s-1.5-.67-1.5-1.5.67-1.5 1.5-1.5 1.5.67 1.5 1.5z"/></svg>
+          Bowling
+        </button>
+        <button id="nav-stunts" class="nav-btn">
+          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          Stunts
+        </button>
+        <button id="nav-contact" class="nav-btn">
+          <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+          Contact
+        </button>
+      </nav>
+
+      <!-- Control Cluster Buttons -->
+      <div class="controls-cluster">
+        <button id="btn-audio-toggle" class="icon-btn active" data-tip="Toggle Audio [M]" aria-label="Toggle Audio">
+          <svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
+        </button>
+        <button id="btn-theme-toggle" class="icon-btn" data-tip="Switch Theme [T]" aria-label="Switch Theme">
+          <svg viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9c0-.46-.04-.92-.1-1.36-.98 1.37-2.58 2.26-4.4 2.26-2.98 0-5.4-2.42-5.4-5.4 0-1.81.89-3.42 2.26-4.4-.44-.06-.9-.1-1.36-.1z"/></svg>
+        </button>
+        <button id="btn-camera-toggle" class="icon-btn" data-tip="Camera Mode [C]" aria-label="Camera Mode">
+          <svg viewBox="0 0 24 24"><path d="M9.4 10.5l4.77-8.26C13.47 2.09 12.75 2 12 2c-2.4 0-4.6.85-6.32 2.25l3.66 6.35.06-.1zM21.54 9c-.92-2.92-3.15-5.26-6-6.34L11.88 9h9.66zm.26 1h-7.49l.29.5 4.76 8.25C21 16.97 22 14.61 22 12c0-.69-.07-1.35-.2-2zM8.54 12l-3.9-6.75C3.01 7.03 2 9.39 2 12c0 .69.07 1.35.2 2h7.49l-.29-.5-8.86-1.5z"/></svg>
+        </button>
+        <button id="btn-respawn" class="icon-btn" data-tip="Respawn Car [R]" aria-label="Respawn Car">
+          <svg viewBox="0 0 24 24"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+        </button>
+        <button id="btn-help-toggle" class="icon-btn" data-tip="Controls [?]" aria-label="Controls Help">
+          <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 16h-2v-2h2v2zm1.07-7.75l-.9.92C12.45 11.9 12 12.5 12 14h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H7c0-2.76 2.24-5 5-5s5 2.24 5 5c0 1.04-.42 1.99-1.07 2.75z"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- CENTER NOTIFICATIONS: Active Zone Banner -->
+    <div id="zone-announcer" class="zone-announcer">
+      <span id="zone-sub" class="zone-sub">STARTING GRID</span>
+      <h2 id="zone-title" class="zone-title">COMMAND LAUNCHPAD</h2>
+    </div>
+
+    <!-- PROXIMITY INTERACT PROMPT -->
+    <div id="interact-prompt" class="interact-prompt hud-interactive">
+      <div class="key-badge">E / TAP</div>
+      <div id="interact-text" class="interact-text">Inspect System</div>
+    </div>
+
+    <!-- BOTTOM BAR: Telemetry, Gems, and Radar -->
+    <footer class="bottom-bar">
+      <!-- Speedometer & Transmission -->
+      <div class="vehicle-telemetry">
+        <div class="speed-dial">
+          <div class="speed-value">
+            <span id="speed-value">0</span>
+            <span class="speed-unit">KM/H</span>
+          </div>
+          <div class="speed-bar-container">
+            <div id="speed-bar-fill" class="speed-bar-fill"></div>
+          </div>
+        </div>
+        <div class="gear-badge">
+          <span class="gear-label">GEAR</span>
+          <span id="gear-val" class="gear-val">N</span>
+        </div>
+      </div>
+
+      <!-- Gem Collector Progress -->
+      <div class="gem-collector">
+        <div class="gem-icon">💎</div>
+        <div class="gem-info">
+          <span class="gem-title">CRYSTALS</span>
+          <span id="gem-count" class="gem-count">0 / 25</span>
+        </div>
+      </div>
+
+      <!-- Radar Minimap -->
+      <div class="minimap-panel">
+        <canvas id="minimap-canvas"></canvas>
+        <div class="minimap-label">RADAR MAP</div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- TOUCH CONTROLS (for Mobile & Tablet) -->
+  <div id="touch-controls" class="touch-controls">
+    <div id="joystick-zone" class="joystick-zone">
+      <div id="joystick-knob" class="joystick-knob"></div>
+    </div>
+
+    <div class="touch-action-pad">
+      <button id="touch-btn-gas" class="touch-btn btn-gas">
+        <span>GAS</span>
+        <small>▲</small>
+      </button>
+      <button id="touch-btn-brake" class="touch-btn btn-brake">
+        <span>BRAKE</span>
+        <small>▼</small>
+      </button>
+      <button id="touch-btn-drift" class="touch-btn">
+        <span>DRIFT</span>
+        <small>⚡</small>
+      </button>
+      <button id="touch-btn-horn" class="touch-btn">
+        <span>HORN</span>
+        <small>📢</small>
+      </button>
+    </div>
+  </div>
+
+  <!-- ======================================================================
+       MODAL 1: FULL OFFICIAL RESUME MODAL
+       ====================================================================== -->
+  <div id="resume-modal" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div>
+          <span class="modal-category">OFFICIAL CURRICULUM VITAE</span>
+          <h2 class="modal-title">Jeswin B // Resume</h2>
+        </div>
+        <button class="modal-close-btn" aria-label="Close modal">✕</button>
+      </div>
+
+      <div class="modal-body">
+        <!-- Resume Header Box with Download CTA -->
+        <div class="resume-header-box">
+          <div class="resume-header-info">
+            <h3>JESWIN B</h3>
+            <p>Computer Science Engineering Student • MITS, Kerala</p>
+            <p style="font-family: var(--font-mono); font-size: 11px; color: var(--primary-glow); margin-top: 6px;">
+              23cs350@mgits.ac.in | +91 8848207076 | Kerala, India | <a href="https://github.com/JB1071017" target="_blank" style="color: #fff; text-decoration: underline;">github.com/JB1071017</a>
+            </p>
+          </div>
+          <a class="btn-primary" href="Jeswin_Resume.pdf" download="Jeswin_B_Resume.pdf" target="_blank" style="white-space: nowrap;">
+            <svg style="width: 16px; height: 16px; fill: currentColor;" viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+            Download PDF
+          </a>
+        </div>
+
+        <!-- Profile Summary -->
+        <div>
+          <h4 class="resume-section-title">📌 Profile Summary</h4>
+          <p style="margin-top: 6px;">
+            Motivated Computer Science Engineering student with practical exposure to software development, full-stack web applications, AI integration, backend systems, and intelligent application development. Skilled in Python, Java, C, C++, JavaScript, Django, REST APIs, Firebase, databases, and Gemini API/LLM integration. Passionate about scalable software, AI, and product development.
+          </p>
+        </div>
+
+        <!-- Education -->
+        <div>
+          <h4 class="resume-section-title">🎓 Education</h4>
+          <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 8px;">
+            <div class="resume-card-item">
+              <div class="resume-card-header">
+                <span class="resume-card-title">Muthoot Institute of Technology and Science (MITS)</span>
+                <span class="resume-card-date">2023 – 2027</span>
+              </div>
+              <div>B.Tech in Computer Science Engineering • <strong>CGPA: 7.88</strong></div>
+            </div>
+            <div class="resume-card-item">
+              <div class="resume-card-header">
+                <span class="resume-card-title">Higher Secondary Education • St. Augustine, Thrissur</span>
+                <span class="resume-card-date">2022</span>
+              </div>
+              <div>Percentage: <strong>98%</strong></div>
+            </div>
+            <div class="resume-card-item">
+              <div class="resume-card-header">
+                <span class="resume-card-title">SSLC • Don Bosco HSS, Irinjalakuda</span>
+                <span class="resume-card-date">2020</span>
+              </div>
+              <div>Grade: <strong>Full A+</strong></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Internship -->
+        <div>
+          <h4 class="resume-section-title">💼 Internship</h4>
+          <div class="resume-card-item" style="margin-top: 8px;">
+            <div class="resume-card-header">
+              <span class="resume-card-title">Cyber Security Intern — NaicoITS, Infopark Kochi</span>
+              <span class="resume-card-date">Internship</span>
+            </div>
+            <ul style="padding-left: 20px; display: flex; flex-direction: column; gap: 4px; margin-top: 6px;">
+              <li>Developed Python-based security automation tools.</li>
+              <li>Worked on vulnerability detection and data integrity analysis.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Key Projects from GitHub -->
+        <div>
+          <h4 class="resume-section-title">💻 Projects (github.com/JB1071017)</h4>
+          <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 8px;">
+            <div class="resume-card-item">
+              <div class="resume-card-header">
+                <span class="resume-card-title">Touch-based Projector System (SmartBoard)</span>
+                <a href="https://github.com/JB1071017/miniproject" target="_blank" style="color: var(--primary-glow); font-size: 11px; font-family: var(--font-mono);">github.com/JB1071017/miniproject ↗</a>
+              </div>
+              <p>Camera-based interactive projection system converting any flat surface into a virtual touchscreen using Python and OpenCV with perspective homography calibration and light-tracking.</p>
+            </div>
+
+            <div class="resume-card-item">
+              <div class="resume-card-header">
+                <span class="resume-card-title">CUADS — ASCII Video Streaming</span>
+                <a href="https://github.com/JB1071017/cuads" target="_blank" style="color: var(--primary-glow); font-size: 11px; font-family: var(--font-mono);">github.com/JB1071017/cuads ↗</a>
+              </div>
+              <p>Upload videos, obtain curl commands, and stream animated ASCII art directly inside terminal shells in real time.</p>
+            </div>
+
+            <div class="resume-card-item">
+              <div class="resume-card-header">
+                <span class="resume-card-title">DeSplit-Core: Native Windows P2P Training Coordinator</span>
+                <span class="resume-card-date">Major Project</span>
+              </div>
+              <p>Asynchronous P2P distributed deep learning coordinator and 3D WebGL telemetry engine natively on Windows with work-stealing straggler preemption and INT8 gossip consensus.</p>
+            </div>
+
+            <div class="resume-card-item">
+              <div class="resume-card-header">
+                <span class="resume-card-title">AI-Powered Circuit Assistant</span>
+                <span class="resume-card-date">Gemini LLM</span>
+              </div>
+              <p>Intelligent circuit assistant using Python, Django, Gemini API, and multimodal LLMs for diagnostic schematic reasoning.</p>
+            </div>
+
+            <div class="resume-card-item">
+              <div class="resume-card-header">
+                <span class="resume-card-title">Full Stack Django Web Application & Android Mobile App</span>
+                <span class="resume-card-date">Web & Mobile</span>
+              </div>
+              <p>Scalable web app with REST APIs and database handling; Android mobile application with Firebase Authentication and Cloud Storage.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Technical Skills -->
+        <div>
+          <h4 class="resume-section-title">⚡ Technical Skills</h4>
+          <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 8px;">
+            <div><strong>Languages:</strong> Python, Java, C, C++, JavaScript</div>
+            <div><strong>Frameworks & Libraries:</strong> Django, Node.js, REST APIs, FastAPI, OpenCV, PyTorch, Three.js</div>
+            <div><strong>Tools & Platforms:</strong> Android Studio, VS Code, PyCharm, Jupyter, ROS, Git/GitHub</div>
+            <div><strong>Databases & Cloud:</strong> Firebase, SQLite/PostgreSQL, Cloud Storage</div>
+            <div><strong>Core Concepts:</strong> Data Structures & Algorithms, OOP, DBMS, Operating Systems, Problem Solving</div>
+          </div>
+        </div>
+
+        <!-- Achievements & Certifications -->
+        <div>
+          <h4 class="resume-section-title">🏆 Achievements & Certifications</h4>
+          <ul style="padding-left: 20px; display: flex; flex-direction: column; gap: 6px; margin-top: 6px;">
+            <li><strong>Winner — ICPC College-Level Programming Competition (2026):</strong> Demonstrated strong competitive programming and algorithmic problem-solving skills.</li>
+            <li><strong>Certification:</strong> Mobile App Development Using Android Studio</li>
+            <li><strong>Certification:</strong> Internship Training in Cyber Security (NaicoITS)</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn-secondary" onclick="window.closeAllModals()">Close</button>
+        <a class="btn-primary" href="Jeswin_Resume.pdf" download="Jeswin_B_Resume.pdf" target="_blank">
+          📥 Download PDF Resume
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================================
+       MODAL 2: GITHUB PROJECT DEEP DIVE MODAL
+       ====================================================================== -->
+  <div id="project-modal" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div>
+          <div class="modal-badge-row">
+            <span id="modal-proj-cat" class="modal-category">CATEGORY</span>
+          </div>
+          <h2 id="modal-proj-title" class="modal-title">Project Title</h2>
+        </div>
+        <button class="modal-close-btn" aria-label="Close modal">✕</button>
+      </div>
+
+      <div class="modal-body">
+        <div id="modal-proj-stats" class="project-stats-grid"></div>
+        <p id="modal-proj-desc"></p>
+
+        <div>
+          <h4 style="font-family: var(--font-mono); font-size: 11px; color: var(--text-dim); text-transform: uppercase; margin-bottom: 8px;">Technologies & Libraries</h4>
+          <div id="modal-proj-tags" class="tech-tags"></div>
+        </div>
+
+        <div>
+          <h4 style="font-family: var(--font-mono); font-size: 11px; color: var(--text-dim); text-transform: uppercase; margin-bottom: 8px;">Code / Implementation</h4>
+          <pre class="code-snippet"><code id="modal-proj-code"></code></pre>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn-secondary" onclick="window.closeAllModals()">Close</button>
+        <a id="modal-proj-repo-btn" class="btn-primary" href="https://github.com/JB1071017" target="_blank" rel="noopener noreferrer">
+          <svg style="width: 16px; height: 16px; fill: currentColor;" viewBox="0 0 24 24"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+          View on GitHub
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================================
+       MODAL 3: EXPERIENCE / INTERNSHIP MODAL
+       ====================================================================== -->
+  <div id="experience-modal" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div>
+          <span class="modal-category">PROFESSIONAL EXPERIENCE</span>
+          <h2 class="modal-title">NaicoITS // Infopark Kochi</h2>
+        </div>
+        <button class="modal-close-btn" aria-label="Close modal">✕</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="project-stats-grid">
+          <div class="stat-box">
+            <span class="stat-val">Cyber Security</span>
+            <span class="stat-desc">Internship Role</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-val">Infopark</span>
+            <span class="stat-desc">Kochi, Kerala</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-val">Automation</span>
+            <span class="stat-desc">Python Tooling</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-val">Integrity</span>
+            <span class="stat-desc">Vulnerability Scans</span>
+          </div>
+        </div>
+
+        <h3 style="font-family: var(--font-display); font-size: 16px; color: #fff; margin-top: 10px;">Role & Key Responsibilities</h3>
+        <ul style="padding-left: 20px; display: flex; flex-direction: column; gap: 8px;">
+          <li>Engineered automated Python-based security scripts to scan for internal configuration vulnerabilities and integrity mismatches.</li>
+          <li>Analyzed log streams to verify data integrity and assess endpoint communication patterns.</li>
+          <li>Collaborated with senior software architects on security best practices in web APIs and database endpoints.</li>
+        </ul>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn-secondary" onclick="window.closeAllModals()">Close</button>
+        <button class="btn-primary" onclick="window.openResumeModal()">View Full Resume</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================================
+       MODAL 4: EDUCATION MODAL
+       ====================================================================== -->
+  <div id="education-modal" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div>
+          <span class="modal-category">ACADEMIC BACKGROUND</span>
+          <h2 class="modal-title">Education & Qualifications</h2>
+        </div>
+        <button class="modal-close-btn" aria-label="Close modal">✕</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="project-stats-grid">
+          <div class="stat-box">
+            <span class="stat-val">7.88</span>
+            <span class="stat-desc">B.Tech CGPA</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-val">98%</span>
+            <span class="stat-desc">Higher Secondary</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-val">Full A+</span>
+            <span class="stat-desc">SSLC Score</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-val">MITS</span>
+            <span class="stat-desc">Engineering College</span>
+          </div>
+        </div>
+
+        <h3 style="font-family: var(--font-display); font-size: 16px; color: #fff; margin-top: 10px;">Academic Institutions</h3>
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <div class="resume-card-item">
+            <div class="resume-card-header">
+              <span class="resume-card-title">Muthoot Institute of Technology and Science (MITS)</span>
+              <span class="resume-card-date">2023 – 2027</span>
+            </div>
+            <div>B.Tech in Computer Science Engineering (CGPA: 7.88)</div>
+          </div>
+          <div class="resume-card-item">
+            <div class="resume-card-header">
+              <span class="resume-card-title">St. Augustine, Thrissur</span>
+              <span class="resume-card-date">2022</span>
+            </div>
+            <div>Higher Secondary Education — 98%</div>
+          </div>
+          <div class="resume-card-item">
+            <div class="resume-card-header">
+              <span class="resume-card-title">Don Bosco HSS, Irinjalakuda</span>
+              <span class="resume-card-date">2020</span>
+            </div>
+            <div>Secondary School Leaving Certificate (SSLC) — Full A+</div>
+          </div>
+        </div>
+
+        <h3 style="font-family: var(--font-display); font-size: 16px; color: #fff; margin-top: 10px;">Relevant Coursework</h3>
+        <p>Data Structures and Algorithms, Object Oriented Programming, Operating Systems, Database Management Systems, Mobile Application Development, Computer Networks.</p>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn-secondary" onclick="window.closeAllModals()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================================
+       MODAL 5: ACHIEVEMENTS & ICPC TROPHY MODAL
+       ====================================================================== -->
+  <div id="achievements-modal" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div>
+          <span class="modal-category">HONORS & AWARDS</span>
+          <h2 class="modal-title">🏆 ICPC Winner (2026)</h2>
+        </div>
+        <button class="modal-close-btn" aria-label="Close modal">✕</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="resume-header-box" style="background: linear-gradient(135deg, rgba(251, 191, 36, 0.2), rgba(245, 158, 11, 0.1)); border-color: var(--amber-glow);">
+          <div>
+            <h3 style="color: var(--amber-glow);">1st Place Champion</h3>
+            <p style="color: #fff;">ICPC College-Level Programming Competition (2026)</p>
+          </div>
+          <div style="font-size: 38px;">🏆</div>
+        </div>
+
+        <p style="margin-top: 10px;">
+          Demonstrated top-tier competitive programming, complex algorithmic problem solving, efficient space-time complexity analysis, and rapid team synchronization under strict time deadlines.
+        </p>
+
+        <h4 style="font-family: var(--font-display); font-size: 16px; color: #fff; margin-top: 12px;">Certifications</h4>
+        <ul style="padding-left: 20px; display: flex; flex-direction: column; gap: 6px; margin-top: 6px;">
+          <li>📱 <strong>Mobile App Development Using Android Studio:</strong> Architectural foundations, Firebase backends, and responsive mobile interfaces.</li>
+          <li>🛡️ <strong>Internship Training in Cyber Security:</strong> Security tooling, vulnerability detection, and network analysis at NaicoITS.</li>
+        </ul>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn-primary" onclick="window.closeAllModals()">Back to Game</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================================
+       MODAL 6: CONTACT & TRANSMISSION
+       ====================================================================== -->
+  <div id="contact-modal" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div>
+          <span class="modal-category">COMMUNICATIONS RELAY TOWER</span>
+          <h2 class="modal-title">Connect with Jeswin B</h2>
+        </div>
+        <button class="modal-close-btn" aria-label="Close modal">✕</button>
+      </div>
+
+      <div class="modal-body">
+        <p>Available for engineering roles, AI/ML research collaborations, full-stack projects, and innovative software development:</p>
+
+        <div style="background: rgba(0, 240, 255, 0.06); border: 1px solid rgba(0, 240, 255, 0.25); border-radius: var(--radius-sm); padding: 14px 18px; display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <div style="font-family: var(--font-mono); font-size: 10px; color: var(--text-dim); text-transform: uppercase;">Direct Contact</div>
+            <div style="font-family: var(--font-mono); font-size: 14px; font-weight: 700; color: var(--primary-glow);">23cs350@mgits.ac.in</div>
+            <div style="font-family: var(--font-mono); font-size: 12px; color: var(--text-muted); margin-top: 2px;">+91 8848207076 • Kerala, India</div>
+          </div>
+          <button class="btn-primary" style="padding: 8px 16px; font-size: 12px;" onclick="window.copyEmailToClipboard()">Copy Email</button>
+        </div>
+
+        <div style="display: flex; gap: 10px; margin-top: 6px;">
+          <a class="btn-secondary" href="https://github.com/JB1071017" target="_blank" style="flex: 1; text-align: center; justify-content: center;">
+            GitHub: JB1071017 ↗
+          </a>
+          <a class="btn-secondary" href="https://www.linkedin.com/in/jeswinb" target="_blank" style="flex: 1; text-align: center; justify-content: center;">
+            LinkedIn: jeswinb ↗
+          </a>
+        </div>
+
+        <form class="contact-form" style="margin-top: 8px;" onsubmit="event.preventDefault(); window.showToast('🚀 Transmission queued! Mail client opening...'); window.location.href = 'mailto:23cs350@mgits.ac.in?subject=' + encodeURIComponent(document.getElementById('form-subject').value) + '&body=' + encodeURIComponent(document.getElementById('form-msg').value);">
+          <div class="form-group">
+            <label for="form-name">Your Call-sign / Name</label>
+            <input id="form-name" class="form-input" type="text" placeholder="e.g. Hiring Manager / Collaborator" required>
+          </div>
+          <div class="form-group">
+            <label for="form-subject">Subject</label>
+            <input id="form-subject" class="form-input" type="text" placeholder="e.g. Software Engineering Opportunity" required>
+          </div>
+          <div class="form-group">
+            <label for="form-msg">Message</label>
+            <textarea id="form-msg" class="form-textarea" placeholder="Write your message here..." required></textarea>
+          </div>
+          <button type="submit" class="btn-primary" style="justify-content: center;">
+            ⚡ Broadcast Transmission
+          </button>
+        </form>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn-secondary" onclick="window.closeAllModals()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================================
+       MODAL 7: CONTROLS & GAMEPLAY GUIDE
+       ====================================================================== -->
+  <div id="help-modal" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div>
+          <span class="modal-category">FLIGHT & DRIVING MANUAL</span>
+          <h2 class="modal-title">Interactive Controls Guide</h2>
+        </div>
+        <button class="modal-close-btn" aria-label="Close modal">✕</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="controls-guide-grid">
+          <div class="guide-item">
+            <div class="guide-keys">
+              <span class="key-cap">W</span>
+              <span class="key-cap">A</span>
+              <span class="key-cap">S</span>
+              <span class="key-cap">D</span>
+            </div>
+            <div class="guide-desc">Drive, Steer, Reverse</div>
+          </div>
+          <div class="guide-item">
+            <div class="guide-keys">
+              <span class="key-cap">SPACE</span>
+            </div>
+            <div class="guide-desc">Handbrake / Power Drift</div>
+          </div>
+          <div class="guide-item">
+            <div class="guide-keys">
+              <span class="key-cap">H</span>
+            </div>
+            <div class="guide-desc">Honk Toy Car Horn</div>
+          </div>
+          <div class="guide-item">
+            <div class="guide-keys">
+              <span class="key-cap">R</span>
+            </div>
+            <div class="guide-desc">Respawn Car at Start</div>
+          </div>
+          <div class="guide-item">
+            <div class="guide-keys">
+              <span class="key-cap">C</span>
+            </div>
+            <div class="guide-desc">Toggle Camera View</div>
+          </div>
+          <div class="guide-item">
+            <div class="guide-keys">
+              <span class="key-cap">T</span>
+            </div>
+            <div class="guide-desc">Toggle Day/Sunset/Night</div>
+          </div>
+          <div class="guide-item">
+            <div class="guide-keys">
+              <span class="key-cap">E</span>
+            </div>
+            <div class="guide-desc">Inspect Zone / Pedestal</div>
+          </div>
+          <div class="guide-item">
+            <div class="guide-keys">
+              <span class="key-cap">M</span>
+            </div>
+            <div class="guide-desc">Mute / Unmute Audio</div>
+          </div>
+        </div>
+
+        <h4 style="font-family: var(--font-display); font-size: 15px; color: #fff; margin-top: 10px;">World Highlights & Minigames</h4>
+        <ul style="padding-left: 20px; display: flex; flex-direction: column; gap: 6px;">
+          <li>🎳 <strong>10-Pin Bowling Alley:</strong> Drive your car into the heavy bowling ball to knock down all 10 pins for a strike!</li>
+          <li>🧱 <strong>Demolition Brick Wall:</strong> Ram through 24 individual stacked bricks at maximum speed!</li>
+          <li>💥 <strong>Skills Demolition Pyramid:</strong> Ram into Python, Django, Java, C++, OpenCV, and PyTorch cubes. Rebuild everything with the red button!</li>
+          <li>🚀 <strong>Spring Trampoline Launchpad:</strong> Hit the green pad for a 15-meter vertical launch!</li>
+          <li>💎 <strong>25 Collectible Crystals:</strong> Discover and collect all 25 gems across the map for victory celebration!</li>
+          <li>📄 <strong>Resume Pavilion:</strong> Visit the pavilion next to spawn or click 'Resume' to view or download Jeswin's official PDF resume.</li>
+        </ul>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn-primary" onclick="window.closeAllModals()">Got It! Let's Drive</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Application Logic Scripts -->
+  <script src="js/audio.js"></script>
+  <script src="js/physics.js"></script>
+  <script src="js/car.js"></script>
+  <script src="js/world.js"></script>
+  <script src="js/main.js"></script>
+
+</body>
+</html>
